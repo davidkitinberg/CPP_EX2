@@ -17,6 +17,11 @@ private:
     void allocate();
     void copyFrom(const SquareMat& other);
     void deallocate();
+    static double sumOf2Matrix(const SquareMat& left, const SquareMat& right); // Helper method to return the difference between 2 matrix's sum
+    
+    // Helper function that returns a minor matrix
+    // by excluding one row and one column from the original
+    SquareMat getMinor(int excludeRow, int excludeCol) const;
 
 public:
 
@@ -54,30 +59,30 @@ public:
     SquareMat operator--(int); // Post-decrement (stores a copy of the original mat first and then decrements the original mat and return the copy that wasn't decremented)
 
 
-    // Transpose
-    SquareMat operator~() const;
-
-    // Compound assignment
-    SquareMat& operator+=(const SquareMat& other);
-    SquareMat& operator-=(const SquareMat& other);
-    SquareMat& operator*=(double scalar);
-    SquareMat& operator/=(double scalar);
-    SquareMat& operator%=(const SquareMat& other);
-    SquareMat& operator%=(int scalar);
+    
+    SquareMat operator~() const;// Transpose
 
     // Comparison
-    bool operator==(const SquareMat& other) const;
-    bool operator!=(const SquareMat& other) const;
-    bool operator<(const SquareMat& other) const;
-    bool operator>(const SquareMat& other) const;
-    bool operator<=(const SquareMat& other) const;
-    bool operator>=(const SquareMat& other) const;
+    bool operator==(const SquareMat& other) const;// Equal matrix-sum comperison operator
+    bool operator!=(const SquareMat& other) const;// Not equal matrix-sum comperison operator
+    bool operator<(const SquareMat& other) const;// Less then matrix-sum comperison operator
+    bool operator>(const SquareMat& other) const;// Greater then matrix-sum comperison operator
+    bool operator<=(const SquareMat& other) const;// Less then equal matrix-sum comperison operator
+    bool operator>=(const SquareMat& other) const;// Greater then equal matrix-sum comperison operator
 
-    // Determinant
-    double operator!() const;
+    double operator!() const;// Determinant calculation of the square matrix using Laplace expansion
+    
+    // Compound assignment
+    SquareMat& operator+=(const SquareMat& other);// Instant addition of matrix to this matrix
+    SquareMat& operator-=(const SquareMat& other);// Instant subtraction of matrix to this matrix
+    SquareMat& operator*=(double scalar);// Instant Scalar multiplication to this matrix
+    SquareMat& operator*=(const SquareMat& other);// Instant multiplication between this matrix and another matrix
+    SquareMat& operator/=(double scalar);// Instant division of this matrix with scalar
+    SquareMat& operator%=(int scalar);// Instant Scalar modulo on this matrix with scalar
+    SquareMat& operator%=(const SquareMat& other);// Instant Element-wise modulo between this matrix and another matrix
 
-    // Output
-    friend std::ostream& operator<<(std::ostream& os, const SquareMat& mat);
+    
+    friend std::ostream& operator<<(std::ostream& os, const SquareMat& mat);// Custom output stream 
 };
 
 }

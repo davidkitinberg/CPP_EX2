@@ -241,7 +241,7 @@ namespace matlib {
         return M;
     }
 
-    // Divition matrix by scalar
+    // Division matrix by scalar
     SquareMat SquareMat::operator/(double scalar) const {
         if (this->size == 0) {
             throw std::invalid_argument("Mat size is 0 therefore nothing to be done");
@@ -325,7 +325,237 @@ namespace matlib {
         return copy; // Return the copy before the decrement
     }
 
+    // Transpose
+    SquareMat SquareMat::operator~() const {
+        SquareMat transposed(size);
     
+        for (int i = 0; i < size; ++i) 
+        {
+            for (int j = 0; j < size; ++j) 
+            {
+                transposed[j][i] = data[i][j];
+            }
+        }
+    
+        return transposed;
+    }
+
+    // Helper method to return the difference between 2 matrix's sum
+    double SquareMat::sumOf2Matrix(const SquareMat& left, const SquareMat& right) {
+        double sumLeft = 0.0, sumRight = 0.0; // Sum of 2 matrixes
+
+        // Sum up left matrix
+        for (int i = 0; i < left.size; ++i) 
+        {
+            for (int j = 0; j < left.size; ++j) 
+            {
+                sumLeft += left.data[i][j];
+            }
+        }
+
+        // Sum up right matrix
+        for (int i = 0; i < right.size; ++i) 
+        {
+            for (int j = 0; j < right.size; ++j) 
+            {
+                sumRight += right.data[i][j];
+            }
+        }
+        
+        return sumLeft - sumRight; // return difference
+    }
+
+    // Equal matrix-sum comperison operator
+    bool SquareMat::operator==(const SquareMat& other) const {
+        double result = sumOf2Matrix(*this,other);
+        if(result == 0) return true;
+        return false;
+    }
+
+    // Not equal matrix-sum comperison operator
+    bool SquareMat::operator!=(const SquareMat& other) const {
+        double result = sumOf2Matrix(*this,other);
+        if(result != 0) return true;
+        return false;
+    }
+
+    // Less then matrix-sum comperison operator
+    bool SquareMat::operator<(const SquareMat& other) const {
+        double result = sumOf2Matrix(*this,other);
+        if(result < 0) return true;
+        return false;
+    }
+    
+    // Greater then matrix-sum comperison operator
+    bool SquareMat::operator>(const SquareMat& other) const {
+        double result = sumOf2Matrix(*this,other);
+        if(result > 0) return true;
+        return false;
+    }
+
+    // Less then equal matrix-sum comperison operator
+    bool SquareMat::operator<=(const SquareMat& other) const {
+        double result = sumOf2Matrix(*this,other);
+        if(result <= 0) return true;
+        return false;
+    }
+
+    // Greater then equal matrix-sum comperison operator
+    bool SquareMat::operator>=(const SquareMat& other) const {
+        double result = sumOf2Matrix(*this,other);
+        if(result >= 0) return true;
+        return false;
+    }
+
+    // Helper function that returns a minor matrix
+    // by excluding one row and one column from the original
+    SquareMat SquareMat::getMinor(int excludeRow, int excludeCol) const {
+        SquareMat minor(size - 1); // The resulting (n-1)x(n-1) matrix
+        int newRow = 0;
+
+        for (int i = 0; i < size; ++i) {
+            if (i == excludeRow) continue; // Skip the excluded row
+
+            int newCol = 0;
+            for (int j = 0; j < size; ++j) {
+                if (j == excludeCol) continue; // Skip the excluded column
+
+                // Copy the value into the minor matrix
+                minor[newRow][newCol] = data[i][j];
+                ++newCol; // index of col increment
+            }
+
+            ++newRow; // index of row increment
+        }
+
+        return minor; // return the matrix minor
+    }
+
+    // Calculates the determinant of the square matrix using Laplace expansion
+    double SquareMat::operator!() const {
+        // Edge case
+        if (size == 0) {
+            throw std::invalid_argument("Matrix size is zero - no deretminant");
+        }
+        // Base cases:
+        // Size == 1 
+        if (size == 1) {
+            return data[0][0];
+        }
+
+        // Size == 2
+        if (size == 2) {
+            return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+        }
+
+
+        // Recursive case: because we are handling only square matrixes we can use Laplace expansion
+
+        double determinant = 0.0; // Starting value for our determinant calculation
+
+        for (int col = 0; col < size; ++col) // We are doing the determinant calculation over the first row
+        {
+            // Calculate cofactor sign of the first row (row No.0 and col)
+            int sign = (col % 2 == 0) ? 1 : -1;
+
+            // Get the minor matrix by excluding row 0 and column `col`
+            SquareMat minor = getMinor(0, col);
+
+            // Recursive step: det += sign * value * determinant(minor)
+            determinant += sign * data[0][col] * !minor;
+        }
+
+        return determinant;
+    }
+
+    // Instant addition of matrix to this matrix
+    SquareMat& SquareMat::operator+=(const SquareMat& other) {
+        if (size != other.size) {
+            throw std::invalid_argument("Matrixes size is not the same");
+        }
+        *this = *this + other;
+
+        return *this;
+    }
+
+    // Instant subtraction of matrix to this matrix
+    SquareMat& SquareMat::operator-=(const SquareMat& other) {
+        if (size != other.size) {
+            throw std::invalid_argument("Matrixes size is not the same");
+        }
+        *this = *this - other;
+
+        return *this;
+    }
+
+    // Instant Scalar multiplication to this matrix
+    SquareMat& SquareMat::operator*=(double scalar) {
+        *this = *this * scalar;
+        return *this;
+    }
+
+    // Instant multiplication between this matrix and another matrix
+    SquareMat& SquareMat::operator*=(const SquareMat& other) {
+        *this = *this * other;
+        return *this;
+    }
+
+    // Instant division of this matrix with scalar
+    SquareMat& SquareMat::operator/=(double scalar) {
+        *this = *this / scalar;
+        return *this;
+    }
+    
+    // Instant Scalar modulo on this matrix with scalar
+    SquareMat& SquareMat::operator%=(int scalar) {
+        *this = *this % scalar;
+        return *this;
+    }
+
+    // Instant Element-wise modulo between this matrix and another matrix
+    SquareMat& SquareMat::operator%=(const SquareMat& other) {
+        if (size != other.size) {
+            throw std::invalid_argument("Matrix sizes must match for element-wise modulo");
+        }
+    
+        for (int i = 0; i < size; ++i) 
+        {
+            for (int j = 0; j < size; ++j) 
+            {
+                int leftMatrixValue = static_cast<int>(data[i][j]);
+                int rightMatrixValue = static_cast<int>(other.data[i][j]);
+    
+                if (rightMatrixValue == 0) {
+                    throw std::invalid_argument("Modulo by zero in matrix element");
+                }
+    
+                data[i][j] = leftMatrixValue % rightMatrixValue;
+            }
+        }
+    
+        return *this;
+    }
+
+    // Custom output stream 
+    std::ostream& operator<<(std::ostream& os, const SquareMat& mat) {
+        for (int i = 0; i < mat.size; ++i) 
+        {
+            for (int j = 0; j < mat.size; ++j) 
+            {
+                os << mat.data[i][j];
+                if (j < mat.size - 1)
+                    os << " ";
+            }
+            os << '\n';
+        }
+        return os;
+    }
+
+
+
+
+
+
 
 }
 
