@@ -18,39 +18,61 @@ int main() {
     cout << "Matrix A:\n" << A;
     cout << "Matrix B:\n" << B;
 
-    cout << "\nA + B:\n" << (A + B);
-    cout << "A - B:\n" << (A - B);
-    cout << "-A:\n" << (-A);
-    cout << "~A (transpose):\n" << (~A);
+    cout << "\n========= addition & subtraction =========\n";
 
-    cout << "\nA * 2.0 (scalar):\n" << (A * 2.0);
-    cout << "A / 2.0 (scalar):\n" << (A / 2.0);
-    cout << "A % 3 (modulo scalar):\n" << (A % 3);
+    cout << "\n=== A + B ===\n" << (A + B);
+    cout << "=== A - B ===\n" << (A - B);
 
-    cout << "\nA * B (element-wise):\n" << (A * B);
-    cout << "A % B (element-wise):\n" << (A % B);
+    cout << "\n========= minus unary & transpose =========\n";
 
-    cout << "\nA ^ 2 (power):\n" << (A ^ 2);
-    cout << "Determinant of A (!A): " << !A << "\n";
+    cout << "=== -A === \n" << (-A);
+    cout << "=== ~A (transpose) ===\n" << (~A);
 
-    cout << "\nUsing compound operators:\n";
-    SquareMat C = A;
+    cout << "\n========= matrix multiplication/division/modulo with scalar =========\n";
+
+    cout << "\n=== A * 2.0 (scalar)=== \n" << (A * 2.0);
+    cout << "=== A / 2.0 (scalar) ===\n" << (A / 2.0);
+    cout << "=== A % 3 (modulo scalar) ===\n" << (A % 3);
+
+    cout << "\n========= matrix multiplication =========\n";
+
+    cout << "\n=== A * B ===\n" << (A * B);
+    cout << "=== A % B (element-wise multiplication) ===\n" << (A % B);
+
+    cout << "\n========= matrix exponentiation & determinant calculation =========\n";
+
+    cout << "\n=== A ^ 2 (power) ===\n" << (A ^ 2);
+    cout << "=== Determinant of A & B (!A , !B) === \nThe determinant value of A is: " << !A << "\nThe determinant value of B is: " << !B ;
+
+    cout << "\n========= Using compound operators (+=,-=,*=,%=) =========\n";
+
+    SquareMat C = A; // Temp matrix for the compound operators
+
     C += B;
-    cout << "A += B:\n" << C;
+    cout << "=== A += B ===\n" << C;
+
     C -= B;
-    cout << "A -= B (back to original A):\n" << C;
+    cout << "=== A -= B (back to original A) ===\n" << C;
+
     C *= 2;
-    cout << "A *= 2:\n" << C;
+    cout << "=== A *= 2 (scalar) ===\n" << C;
+
+    C = A; // Return to the original values of A for easy tracking of the values
+
     C %= 3;
-    cout << "A %= 3:\n" << C;
+    cout << "=== A %= 3 (modulo between matrix and scalar) ===\n" << C;
 
-    C = A;
+    C = A; // Return to the original values of A for easy tracking of the values
+
     C *= B;
-    cout << "A *= B (element-wise):\n" << C;
-    C %= B;
-    cout << "A %= B (element-wise):\n" << C;
+    cout << "=== A *= B (matrix multiplication compound) ===\n" << C;
 
-    cout << "\nTesting comparison operators:\n";
+    C = A; // Return to the original values of A for easy tracking of the values
+
+    C %= B;
+    cout << "=== A %= B (element-wise multiplication compound) ===\n" << C;
+
+    cout << "\n=== Comparison operators===\n";
     cout << "A == B: " << (A == B ? "true" : "false") << "\n";
     cout << "A != B: " << (A != B ? "true" : "false") << "\n";
     cout << "A < B: " << (A < B ? "true" : "false") << "\n";

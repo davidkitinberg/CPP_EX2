@@ -14,10 +14,9 @@ private:
     int size;
     double** data;
 
-    void allocate();
-    void copyFrom(const SquareMat& other);
-    void deallocate();
-    static double sumOf2Matrix(const SquareMat& left, const SquareMat& right); // Helper method to return the difference between 2 matrix's sum
+    // Helper method to return the difference between 2 matrix's sum
+    // If returned val > 0 -> left has a bigger sum, if val < 0 -> right has a bigger sum, if val = 0 -> the sums are equal
+    static double sumDifference(const SquareMat& left, const SquareMat& right);
     
     // Helper function that returns a minor matrix
     // by excluding one row and one column from the original

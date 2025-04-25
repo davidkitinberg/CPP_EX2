@@ -4,12 +4,12 @@
 #include <iostream>
 #include <stdexcept>
 #include "SquareMat.hpp"
-
+#include <cmath>
 
 
 namespace matlib {
 
-    // Constractor
+    // Constructor
     SquareMat::SquareMat(int n) : size(n) {
 
         if (n <= 0) {
@@ -27,7 +27,7 @@ namespace matlib {
         }
     }
 
-    // Deep copy constractor
+    // Deep copy constructor
     SquareMat::SquareMat(const SquareMat& other) : size(other.size) {
 
         data = new double*[size]; // Allocate array of pointers (rows)
@@ -226,16 +226,16 @@ namespace matlib {
     // Modulo matrix on scalar
     SquareMat SquareMat::operator%(int scalar) const {
         if(scalar == 0) {
-            return *this;
+            throw std::invalid_argument("Cannot perform modulo with zero.");
         }
 
-        SquareMat M(size); // New mat after Element-wise multiplication
+        SquareMat M(size); // New mat after modulo with scalar
 
         for (int i = 0; i < size; ++i) 
         {
             for (int j = 0; j < size; ++j) 
             {
-                M[i][j] = static_cast<int>(data[i][j]) % scalar;
+                M[i][j] = std::fmod(data[i][j], scalar);
             }
         }
         return M;
@@ -327,7 +327,7 @@ namespace matlib {
 
     // Transpose
     SquareMat SquareMat::operator~() const {
-        SquareMat transposed(size);
+        SquareMat transposed(size); // New mat after transpose
     
         for (int i = 0; i < size; ++i) 
         {
@@ -341,7 +341,7 @@ namespace matlib {
     }
 
     // Helper method to return the difference between 2 matrix's sum
-    double SquareMat::sumOf2Matrix(const SquareMat& left, const SquareMat& right) {
+    double SquareMat::sumDifference(const SquareMat& left, const SquareMat& right) {
         double sumLeft = 0.0, sumRight = 0.0; // Sum of 2 matrixes
 
         // Sum up left matrix
@@ -367,42 +367,42 @@ namespace matlib {
 
     // Equal matrix-sum comperison operator
     bool SquareMat::operator==(const SquareMat& other) const {
-        double result = sumOf2Matrix(*this,other);
+        double result = sumDifference(*this,other);
         if(result == 0) return true;
         return false;
     }
 
     // Not equal matrix-sum comperison operator
     bool SquareMat::operator!=(const SquareMat& other) const {
-        double result = sumOf2Matrix(*this,other);
+        double result = sumDifference(*this,other);
         if(result != 0) return true;
         return false;
     }
 
     // Less then matrix-sum comperison operator
     bool SquareMat::operator<(const SquareMat& other) const {
-        double result = sumOf2Matrix(*this,other);
+        double result = sumDifference(*this,other);
         if(result < 0) return true;
         return false;
     }
     
     // Greater then matrix-sum comperison operator
     bool SquareMat::operator>(const SquareMat& other) const {
-        double result = sumOf2Matrix(*this,other);
+        double result = sumDifference(*this,other);
         if(result > 0) return true;
         return false;
     }
 
     // Less then equal matrix-sum comperison operator
     bool SquareMat::operator<=(const SquareMat& other) const {
-        double result = sumOf2Matrix(*this,other);
+        double result = sumDifference(*this,other);
         if(result <= 0) return true;
         return false;
     }
 
     // Greater then equal matrix-sum comperison operator
     bool SquareMat::operator>=(const SquareMat& other) const {
-        double result = sumOf2Matrix(*this,other);
+        double result = sumDifference(*this,other);
         if(result >= 0) return true;
         return false;
     }
